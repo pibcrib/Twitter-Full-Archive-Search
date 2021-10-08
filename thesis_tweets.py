@@ -6,8 +6,8 @@ import time
 from requests.exceptions import Timeout, ConnectionError
 from requests.packages.urllib3.exceptions import ReadTimeoutError
 
-''' More info on Standard Search API:
-https://developer.twitter.com/en/docs/tweets/search/api-reference/get-search-tweets.html'''
+''' More info on Full-Archive API:
+https://developer.twitter.com/en/docs/twitter-api/premium/search-api/quick-start/premium-full-archive'''
 
 # Add your Twitter API credentials
 #       Source code currently pulls values from environment variables
