@@ -1,4 +1,6 @@
 # CSV Generated files #
 
+env
+setup.sh
 test.py
 *.csv

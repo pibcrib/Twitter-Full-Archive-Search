@@ -19,7 +19,7 @@ access_key = os.environ.get("ACCESS_KEY", None)
 access_secret = os.environ.get("ACCESS_SECRET", None)
 #       Function for checking if twitter credentials are set in environment
 def check_credentials():
-    credential_lst = list(consumer_key, consumer_secret, access_key, access_secret)
+    credential_lst = [consumer_key, consumer_secret, access_key, access_secret]
     has_creds = sum(bool(cred) for cred in credential_lst) == 4
 
     if has_creds:
@@ -49,13 +49,11 @@ search_words = "#boycotthandm"
 # Exclude retweets in our search
 new_search = search_words + " -filter:retweets" + " result_type:popular"
 
-'''Search for tweets created before a given date.
-Keep in mind that the Twitter Standard Search API has a 7-day limit.
-In other words, no tweets will be found for a date older than one week.'''
+'''Search for tweets created within a given time frame.'''
 date_since = "201801050000"   #2018-1-5 00:00
 
 # Define until what date we are looking for tweets
-date_until = "201801302359" #2017-01-30 23:59
+date_until = "201801302359" #2018-01-30 23:59
 
 # Total tweets to gather in our search
 totalTweets = 5000 #consider doing 100000
@@ -80,9 +78,6 @@ include_entities = True
 # Set the name for CSV file  where the tweets will be saved
 filename = "tweets_HM"
 
-#Consider using this to filter out replies: exclude_replies; pass this as a parameter with the above; set to TRUE
-#Consider setting include_rts to FALSE
-
 # Function for handling pagination in our search
 def limit_handled(cursor):
     while True:
@@ -96,22 +91,21 @@ def limit_handled(cursor):
 def search_tweets(new_search, date_since):
 
     # performs the search using the defined variables
+    # consider uncommenting commented parametrs for more restrictions
     for tweet in limit_handled(tweepy.Cursor(api.search_full_archive,
-                               environment_name = "searcher", #added line from original code
-                               query = new_search,    #change from q to query
-                               maxResults=count,     #change from count to maxResults
-                               #tweet_mode='extended',
+                               environment_name = "searcher", # CHANGE THIS TO ENV NAME FROM API
+                               query = new_search,
+                               maxResults=count,
+                               tweet_mode='extended',
                                #lang=lang,
                                #geocode=geocode,
                                #result_type=result_type,
                                #include_entities=include_entities,
-                               #bucket = "day", #just added
-                               fromDate =date_since, #changed from until to fromDate
-                               toDate=date_until).items(totalTweets)):  #changed from since to toDate
+                               #bucket = "day",
+                               fromDate =date_since,
+                               toDate=date_until).items(totalTweets)):
 
         try:
-
-            # Checks if its a extended tweet (>140 characters)
             content = tweet.text
 
             '''Convert all named and numeric character references
@@ -139,12 +133,11 @@ def search_tweets(new_search, date_since):
             crat = tweet.author.created_at
             ggeo = tweet.geo
             prot = tweet.author.protected
-            '''    ?
-            '''
 
-            # Exclude retweets, too many mentions and too many hashtags
+            # Uncomment to Exclude retweets, too many mentions and too many hashtags
             #if not any((('RT @' in content,
             #           content.count('@') >= 2, content.count('#') >= 3))):
+
 
             # Saves the tweet information in a new row of the CSV file
             writer.writerow([content, timeTweet,
@@ -200,5 +193,4 @@ def work():
 
 
 if __name__ == '__main__':
-
     work()
