@@ -29,7 +29,7 @@ def check_credentials():
         print("Error: Twitter Credential(s) Not Included:")
         for cred in credential_lst:
             if not cred:
-                print(f"\n{cred}.upper")
+                print(f"\n{cred.upper()}")
 
         print("Please set environment variables for the abvoe credentials.")
         return False
